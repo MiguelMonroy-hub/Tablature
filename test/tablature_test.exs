@@ -54,4 +54,19 @@ test "Stairway to Heaven" do
   expected = "D7 G5 B5 e5 e7 B5 G5 e7 e8 B5 G5 e8 e2 B3 G2 e2 e0 B1 G2 B1 e0 e0 B1 G2 B0 B1 B1"
   assert Tablature.parse(tab) == expected
 end
+
+test "Stairway to Heaven (multiple strings)" do
+  tab = """
+        e|-------5-7-----7-|
+        B|-----5-----5-----|
+        G|---5---------5---|
+        D|-7-------6-------|
+        A|-----------------|
+        E|-----------------|
+        """
+
+  expected = "D7 G5 B5 e5 e7/D6 B5 G5 e7"
+
+  assert Tablature.parse(tab) == expected
+end
 end

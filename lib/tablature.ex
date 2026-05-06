@@ -11,16 +11,23 @@ defmodule Tablature do
       |> Enum.max()
 
     0..(max_length - 1)
-    |> Enum.flat_map(fn index ->
-      Enum.map(lines, fn {string, notes} ->
-        char = String.at(notes, index)
+    |> Enum.map(fn index ->
+      notes_at_position =
+        Enum.map(lines, fn {string, notes} ->
+          char = String.at(notes, index)
 
-        if char =~ ~r/\d/ do
-          string <> char
-        else
-          nil
-        end
-      end)
+          if char =~ ~r/\d/ do
+            string <> char
+          else
+            nil
+          end
+        end)
+        |> Enum.reject(&is_nil/1)
+
+      case notes_at_position do
+        [] -> nil
+        notes -> Enum.join(notes, "/")
+      end
     end)
     |> Enum.reject(&is_nil/1)
     |> Enum.join(" ")
