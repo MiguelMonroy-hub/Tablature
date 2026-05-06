@@ -1,22 +1,33 @@
 defmodule Tablature do
   def parse(tab) do
-    tab
-    |> String.split("\n", trim: true)
-    |> Enum.map(&parse_line/1)
-    |> Enum.zip()
-    |> Enum.flat_map(&Tuple.to_list/1)
+    lines =
+      tab
+      |> String.split("\n", trim: true)
+      |> Enum.map(&split_line/1)
+
+    max_length =
+      lines
+      |> Enum.map(fn {_string, notes} -> String.length(notes) end)
+      |> Enum.max()
+
+    0..(max_length - 1)
+    |> Enum.flat_map(fn index ->
+      Enum.map(lines, fn {string, notes} ->
+        char = String.at(notes, index)
+
+        if char =~ ~r/\d/ do
+          string <> char
+        else
+          nil
+        end
+      end)
+    end)
     |> Enum.reject(&is_nil/1)
     |> Enum.join(" ")
   end
 
-  defp parse_line(line) do
+  defp split_line(line) do
     [string, notes] = String.split(line, "|", parts: 2)
-
-    Regex.scan(~r/\d+|-/, notes)
-    |> List.flatten()
-    |> Enum.map(fn
-      "-" -> nil
-      note -> string <> note
-    end)
+    {string, notes}
   end
 end

@@ -40,4 +40,18 @@ defmodule TablatureTest do
   expected = "e7 B0 G0 e7 B0 G0 e7 B0 G0 e7 B0 G0 e5 B0 G0 e3 B0 G0 e3 B0 G0 e2 B0 G0 e0 B0 G0 e0 B0 G0"
   assert Tablature.parse(tab) == expected
 end
+
+
+test "Stairway to Heaven" do
+  tab = """
+        e|-------5-7-----7-8-----8-2-----2-0-------0-0-----------|
+        B|-----5-----5-------5-------3-------1---1-----1---0-1-1-|
+        G|---5---------5-------5-------2-------2---------2-------|
+        D|-7-----------------------------------------------------|
+        A|-------------------------------------------------------|
+        E|-------------------------------------------------------|
+        """
+  expected = "D7 G5 B5 e5 e7 B5 G5 e7 e8 B5 G5 e8 e2 B3 G2 e2 e0 B1 G2 B1 e0 e0 B1 G2 B0 B1 B1"
+  assert Tablature.parse(tab) == expected
+end
 end
