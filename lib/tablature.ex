@@ -16,17 +16,36 @@ defmodule Tablature do
         Enum.map(lines, fn {string, notes} ->
           char = String.at(notes, index)
 
-          if char =~ ~r/\d/ do
-            string <> char
-          else
-            nil
+          cond do
+            char == nil ->
+              nil
+
+            char =~ ~r/\d/ ->
+              string <> char
+
+            true ->
+              nil
           end
         end)
         |> Enum.reject(&is_nil/1)
 
-      case notes_at_position do
-        [] -> nil
-        notes -> Enum.join(notes, "/")
+      current_chars =
+        Enum.map(lines, fn {_string, notes} ->
+          String.at(notes, index)
+        end)
+
+      cond do
+        notes_at_position != [] ->
+          Enum.join(notes_at_position, "/")
+
+        Enum.any?(current_chars, fn c -> c == "|" end) ->
+          nil
+
+        Enum.any?(current_chars, fn c -> c == "-" end) ->
+          "_"
+
+        true ->
+          nil
       end
     end)
     |> Enum.reject(&is_nil/1)
